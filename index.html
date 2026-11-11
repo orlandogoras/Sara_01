@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AventuraGRADO 6° - Matemáticas Interactivas</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <!-- html2canvas CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --text-muted: #6c757d;
+            --primary: #4b6cb7;
+            --primary-hover: #3b5998;
+            --secondary: #182848;
+            --accent: #00b4d8;
+            --success: #2ec4b6;
+            --danger: #e63946;
+            --warning: #ffb703;
+            --border-color: #e0e6ed;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
+            --font-main: 'Poppins', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121824;
+            --card-bg: #1e2738;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary: #4895ef;
+            --primary-hover: #3a0ca3;
+            --secondary: #0f172a;
+            --accent: #4cc9f0;
+            --success: #06d6a0;
+            --danger: #ef476f;
+            --warning: #ffd166;
+            --border-color: #334155;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-family: var(--font-main);
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            color: white;
+        }
+
+        nav.tabs-nav {
+            display: flex;
+            justify-content: center;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.5rem 1rem 0;
+            gap: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            font-family: var(--font-main);
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .accordion-item {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            background-color: var(--card-bg);
+        }
+
+        .accordion-header {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: var(--font-main);
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-header:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+
+        .accordion-body {
+            padding: 0 1.25rem 1.25rem;
+            display: none;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+        .accordion-item.active .accordion-body {
+            display: block;
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .example-box {
+            background-color: var(--bg-color);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin-top: 0.75rem;
+            font-family: var(--font-main);
+        }
+
+        .lab-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--bg-color);
+            padding: 1rem;
+            border-radius: var(--radius);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .control-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary);
+        }
+
+        .svg-container {
+            width: 100%;
+            height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-color);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .quiz-card {
+            position: relative;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .option-btn {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            font-weight: 500;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background-color: rgba(75, 108, 183, 0.05);
+        }
+
+        .feedback {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            margin-top: 1rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.success {
+            display: block;
+            background-color: rgba(46, 196, 182, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .feedback.error {
+            display: block;
+            background-color: rgba(230, 57, 70, 0.15);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .sketchpad-container {
+            margin-top: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .sketchpad-toolbar {
+            background-color: var(--bg-color);
+            padding: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tool-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.3rem 0.6rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .tool-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        canvas.sketchpad {
+            display: block;
+            width: 100%;
+            height: 240px;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .hero-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2.5rem 2rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-banner h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background-color: var(--accent);
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .op-tag {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            font-weight: 600;
+        }
+        .op-single { background-color: rgba(46, 196, 182, 0.2); color: var(--success); }
+        .op-multi { background-color: rgba(255, 183, 3, 0.25); color: #b78103; }
+
+        @media (max-width: 768px) {
+            header { padding: 1rem; }
+            main { padding: 0 1rem; }
+            .hero-banner { padding: 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header>
+        <div class="logo-container">
+            <span class="logo-icon">📐</span>
+            <h1>AventuraGRADO 6°</h1>
+        </div>
+        <div class="controls">
+            <button class="btn" id="langToggleBtn" onclick="toggleLanguage()">🌐 ES</button>
+            <button class="btn" id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
+        </div>
+    </header>
+
+    <nav class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('inicio')">🏠 <span data-i18n="tab_home">Inicio</span></button>
+        <button class="tab-btn" onclick="switchTab('teoria')">📚 <span data-i18n="tab_theory">Teoría y Ejemplos</span></button>
+        <button class="tab-btn" onclick="switchTab('laboratorio')">🧪 <span data-i18n="tab_lab">Laboratorio SVG</span></button>
+        <button class="tab-btn" onclick="switchTab('quiz')">📝 <span data-i18n="tab_quiz">Práctica de Examen</span></button>
+    </nav>
+
+    <main>
+        <!-- TAB 1: INICIO -->
+        <section id="tab-inicio" class="tab-content active">
+            <div class="hero-banner">
+                <span class="badge" data-i18n="grade_badge">Educación Secundaria</span>
+                <h2 data-i18n="welcome_title">¡Bienvenido a AventuraGRADO 6°!</h2>
+                <p data-i18n="welcome_subtitle">Tu plataforma interactiva para dominar aritmética, fracciones, porcentajes y geometría de manera visual.</p>
+            </div>
+
+            <div class="grid-3">
+                <div class="card">
+                    <h3>🔢 <span data-i18n="card_numbers_title">Operaciones Fundamentales</span></h3>
+                    <p data-i18n="card_numbers_desc">Suma, resta, multiplicación y división de enteros y números decimales (con punto decimal).</p>
+                </div>
+                <div class="card">
+                    <h3>🍕 <span data-i18n="card_fractions_title">Fracciones y Porcentajes</span></h3>
+                    <p data-i18n="card_fractions_desc">Algoritmos de paso a paso con fracciones, conversiones a porcentaje y situaciones comerciales.</p>
+                </div>
+                <div class="card">
+                    <h3>📐 <span data-i18n="card_geometry_title">Áreas y Geometría</span></h3>
+                    <p data-i18n="card_geometry_desc">Explora visualmente rectángulos, triángulos y círculos calculando sus áreas dinámicamente.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 data-i18n="goals_title">🎯 Metas Curriculares de Aprendizaje</h3>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;" id="goals-list"></ul>
+            </div>
+        </section>
+
+        <!-- TAB 2: TEORÍA Y EJEMPLOS -->
+        <section id="tab-teoria" class="tab-content">
+            <div class="card">
+                <h2 data-i18n="theory_header">Guía Teórica Interactiva y Algoritmos Paso a Paso</h2>
+                <p data-i18n="theory_sub">Haz clic en cada tema para desplegar explicaciones detalladas sobre cómo realizar operaciones con decimales y fracciones.</p>
+            </div>
+
+            <div id="accordion-container"></div>
+        </section>
+
+        <!-- TAB 3: LABORATORIO SVG -->
+        <section id="tab-laboratorio" class="tab-content">
+            <div class="card">
+                <h2 data-i18n="lab_header">Laboratorio Geométrico e Interactivo SVG</h2>
+                <p data-i18n="lab_sub">Modifica las variables dinámicas para visualizar en tiempo real los cambios numéricos y geométricos.</p>
+                
+                <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="setLabMode('geometry')" data-i18n="lab_mode_geo">📐 Áreas de Figuras Planas</button>
+                    <button class="btn" onclick="setLabMode('fractions')" data-i18n="lab_mode_frac">🍕 Manipulador de Fracciones</button>
+                    <button class="btn" onclick="setLabMode('percentage')" data-i18n="lab_mode_perc">📊 Simulador de Porcentajes</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="lab-controls" id="lab-controls"></div>
+                <div class="svg-container">
+                    <svg id="svg-lab-viewport" width="100%" height="100%" viewBox="0 0 600 350"></svg>
+                </div>
+                <div id="lab-metrics" style="margin-top: 1rem; font-weight: 600; text-align: center; font-size: 1.1rem;"></div>
+            </div>
+        </section>
+
+        <!-- TAB 4: PRÁCTICA DE EXAMEN (QUIZ) -->
+        <section id="tab-quiz" class="tab-content">
+            <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 data-i18n="quiz_header">Banco Dinámico de Problemas</h2>
+                    <p data-i18n="quiz_sub">Incluye ejercicios de 1 sola operación y de 2 o más operaciones combinadas.</p>
+                </div>
+                <button class="btn btn-primary" onclick="generateQuiz()"><span data-i18n="btn_regenerate">🔄 Generar Nuevos Modelos / Preguntas</span></button>
+            </div>
+
+            <div id="quiz-container"></div>
+        </section>
+    </main>
+
+    <script>
+        /* ==========================================================================
+           1. ESTADO GLOBAL E IDIOMAS (Formato Punto Decimal para México)
+           ========================================================================== */
+        let currentLang = localStorage.getItem('aventura_lang') || 'ES';
+        let currentTheme = localStorage.getItem('aventura_theme') || 'light';
+        let currentLabMode = 'geometry';
+
+        const i18n = {
+            ES: {
+                tab_home: "Inicio",
+                tab_theory: "Teoría y Ejemplos",
+                tab_lab: "Laboratorio SVG",
+                tab_quiz: "Práctica de Examen",
+                grade_badge: "Grado 6° / Sec. México",
+                welcome_title: "¡Bienvenido a AventuraGRADO 6°!",
+                welcome_subtitle: "Tu plataforma interactiva para dominar aritmética, fracciones, porcentajes y geometría.",
+                card_numbers_title: "Operaciones Fundamentales",
+                card_numbers_desc: "Suma, resta, multiplicación y división con enteros y números decimales exactos.",
+                card_fractions_title: "Fracciones y Porcentajes",
+                card_fractions_desc: "Algoritmos con racionales, conversiones a decimal y resolución de descuentos.",
+                card_geometry_title: "Áreas de Figuras Planas",
+                card_geometry_desc: "Exploración visual y cálculo dinámico de rectángulos, cuadrados, triángulos y círculos.",
+                goals_title: "🎯 Metas Curriculares de Aprendizaje",
+                theory_header: "Guía Teórica Curricular y Algoritmos Paso a Paso",
+                theory_sub: "Haz clic en cada tema para explorar procedimientos de cálculo con fracciones y decimales.",
+                lab_header: "Laboratorio Geométrico e Interactivo SVG",
+                lab_sub: "Modifica las variables dinámicas para visualizar en tiempo real cómo cambian áreas y proporciones.",
+                lab_mode_geo: "📐 Áreas de Figuras Planas",
+                lab_mode_frac: "🍕 Manipulador de Fracciones",
+                lab_mode_perc: "📊 Simulador de Porcentajes",
+                quiz_header: "Banco Dinámico de Problemas",
+                quiz_sub: "Resuelve los ejercicios utilizando la pizarra digital integrada para tus cálculos paso a paso.",
+                btn_regenerate: "🔄 Generar Nuevos Modelos / Preguntas",
+                btn_check: "Verificar Respuesta",
+                correct_msg: "¡Excelente! Respuesta correcta. 🎉",
+                incorrect_msg: "Respuesta incorrecta. Revisa el procedimiento e inténtalo de nuevo. 💡",
+                sketch_pencil: "✏️ Pincel",
+                sketch_line: "📏 Línea",
+                sketch_rect: "⬛ Rectángulo",
+                sketch_eraser: "🧹 Borrador Inteligente",
+                sketch_clear: "🗑️ Limpiar Pizarra",
+                sketch_copy: "📋 Capturar Ejercicio Completo",
+                sketch_download: "💾 Descargar Captura Completa",
+                shape_rectangle: "Rectángulo",
+                shape_square: "Cuadrado",
+                shape_triangle: "Triángulo",
+                shape_circle: "Círculo"
+            },
+            EN: {
+                tab_home: "Home",
+                tab_theory: "Theory & Examples",
+                tab_lab: "SVG Laboratory",
+                tab_quiz: "Exam Practice",
+                grade_badge: "6th Grade - Secondary Education",
+                welcome_title: "Welcome to AventuraGRADO 6°!",
+                welcome_subtitle: "Your interactive platform to master arithmetic, fractions, percentages, and geometry.",
+                card_numbers_title: "Core Operations",
+                card_numbers_desc: "Addition, subtraction, multiplication, and division with natural numbers and decimals.",
+                card_fractions_title: "Fractions & Percentages",
+                card_fractions_desc: "Step-by-step algorithms for rationals, decimal conversions, and discount problems.",
+                card_geometry_title: "Plane Figure Areas",
+                card_geometry_desc: "Visual exploration and dynamic calculations of rectangles, squares, triangles, and circles.",
+                goals_title: "🎯 Curriculum Learning Goals",
+                theory_header: "Step-by-Step Theory & Algorithm Guide",
+                theory_sub: "Click on any topic to explore calculations for fractions and decimal operations.",
+                lab_header: "Interactive SVG Laboratory",
+                lab_sub: "Adjust dynamic variables to visualize real-time changes in areas and proportions.",
+                lab_mode_geo: "📐 Plane Figure Areas",
+                lab_mode_frac: "🍕 Fraction Manipulator",
+                lab_mode_perc: "📊 Percentage Simulator",
+                quiz_header: "Dynamic Problem Bank (Quiz)",
+                quiz_sub: "Solve problems and use the integrated sketchpad to perform your step-by-step scratchwork.",
+                btn_regenerate: "🔄 Generate New Models / Questions",
+                btn_check: "Check Answer",
+                correct_msg: "Excellent! Correct answer. 🎉",
+                incorrect_msg: "Incorrect answer. Review your steps and try again. 💡",
+                sketch_pencil: "✏️ Pencil",
+                sketch_line: "📏 Line",
+                sketch_rect: "⬛ Rectangle",
+                sketch_eraser: "🧹 Smart Eraser",
+                sketch_clear: "🗑️ Clear Canvas",
+                sketch_copy: "📋 Copy Full Exercise Shot",
+                sketch_download: "💾 Download Full Exercise Shot",
+                shape_rectangle: "Rectangle",
+                shape_square: "Square",
+                shape_triangle: "Triangle",
+                shape_circle: "Circle"
+            }
+        };
+
+        const goalsData = {
+            ES: [
+                "Resolver problemas que exigen una sola operación básica (suma, resta, multiplicación o división).",
+                "Resolver situaciones complejas de 2 o más operaciones combinadas con números decimales y racionales.",
+                "Dominar los algoritmos de suma, resta, producto y cociente de números decimales (utilizando el punto decimal).",
+                "Operar fluidamente con fracciones homogéneas y heterogéneas, simplificando los resultados.",
+                "Establecer conversiones exactas entre decimales y porcentajes para resolver problemas financieros.",
+                "Calcular el área de rectángulos, triángulos y círculos a partir de medidas exactas."
+            ],
+            EN: [
+                "Solve single-operation math problems involving core operations.",
+                "Solve multi-step contextualized problems requiring 2 or more combined operations.",
+                "Master algorithms for adding, subtracting, multiplying, and dividing decimal numbers using decimal points.",
+                "Perform operations with like and unlike fractions, simplifying intermediate and final values.",
+                "Convert between decimals and percentages to solve practical economic situations.",
+                "Compute exact surface areas of rectangles, triangles, and circles."
+            ]
+        };
+
+        const theoryData = [
+            {
+                id: 1,
+                title: { ES: "Tema 1: Operaciones Básicas con Decimales (Suma, Resta, Multiplicación, División)", EN: "Topic 1: Basic Operations with Decimals" },
+                content: {
+                    ES: `
+                    <strong>Procedimientos paso a paso con números decimales (usando punto decimal):</strong><br>
+                    • <strong>Suma y Resta:</strong> Alinea los números verticalmente haciendo coincidir el punto decimal. Si un número tiene menos decimales, agrega ceros a la derecha. Efectúa la operación normalmente y baja el punto decimal en la misma columna.<br>
+                    • <strong>Multiplicación:</strong> Multiplica los números ignorando los puntos decimales. Al finalizar, cuenta el total de dígitos decimales que tienen ambos factores combinados y recorre el punto decimal hacia la izquierda en el resultado esa misma cantidad de lugares.<br>
+                    • <strong>División:</strong> Si el divisor contiene punto decimal, muévelo a la derecha hasta hacerlo entero y mueve el punto del dividendo la misma cantidad de lugares (agregando ceros si es necesario). Realiza la división habitualmente subiendo el punto decimal al cociente.
+                    `,
+                    EN: `
+                    <strong>Step-by-step decimal procedures:</strong><br>
+                    • <strong>Addition & Subtraction:</strong> Line up numbers vertically by decimal point. Add trailing zeros if needed. Perform standard operation and bring down the decimal point.<br>
+                    • <strong>Multiplication:</strong> Multiply as whole numbers. Count total decimal places in both factors. Move decimal point left by that total in the answer.<br>
+                    • <strong>Division:</strong> Move decimal point in divisor right to make it a whole number, move dividend point right by same amount. Divide normally.
+                    `
+                },
+                example: {
+                    ES: "Ejemplo: Para calcular 12.5 × 3.4 = 42.50. En suma: 14.75 + 8.30 = 23.05 MXN.",
+                    EN: "Example: Calculating 12.5 × 3.4 = 42.50. In addition: 14.75 + 8.30 = 23.05 MXN."
+                }
+            },
+            {
+                id: 2,
+                title: { ES: "Tema 2: Operaciones con Fracciones (Homogéneas y Heterogéneas)", EN: "Topic 2: Operations with Fractions" },
+                content: {
+                    ES: `
+                    <strong>Procedimientos paso a paso con Fracciones:</strong><br>
+                    • <strong>Suma y Resta (Igual denominador):</strong> Conserva el mismo denominador y suma/resta directamente los numeradores: <em>a/c ± b/c = (a ± b)/c</em>.<br>
+                    • <strong>Suma y Resta (Diferente denominador):</strong> Encuentra el mínimo común denominador (mcm) o aplica el producto cruzado: <em>a/b + c/d = (a·d + b·c) / (b·d)</em>.<br>
+                    • <strong>Multiplicación:</strong> Multiplica directamente en línea recta: numerador por numerador y denominador por denominador: <em>(a/b) × (c/d) = (a·c) / (b·d)</em>.<br>
+                    • <strong>División:</strong> Multiplica la primera fracción por el recíproco de la segunda (o multiplica en cruz): <em>(a/b) ÷ (c/d) = (a·d) / (b·c)</em>.
+                    `,
+                    EN: `
+                    <strong>Step-by-step Fraction algorithms:</strong><br>
+                    • <strong>Like Denominators:</strong> Keep denominator, add/subtract numerators: <em>(a ± b)/c</em>.<br>
+                    • <strong>Unlike Denominators:</strong> Cross multiply or find LCM: <em>(a·d ± b·c) / (b·d)</em>.<br>
+                    • <strong>Multiplication:</strong> Multiply across: <em>(a·c) / (b·d)</em>.<br>
+                    • <strong>Division:</strong> Multiply by reciprocal: <em>(a·d) / (b·c)</em>.
+                    `
+                },
+                example: {
+                    ES: "Ejemplo: Sumar 1/4 + 2/3 = (1×3 + 4×2)/(4×3) = (3 + 8)/12 = 11/12. Dividir: (3/4) ÷ (1/2) = (3×2)/(4×1) = 6/4 = 3/2 = 1.5.",
+                    EN: "Example: 1/4 + 2/3 = (3 + 8)/12 = 11/12. Dividing: (3/4) ÷ (1/2) = 6/4 = 1.5."
+                }
+            },
+            {
+                id: 3,
+                title: { ES: "Tema 3: Conversión entre Decimales y Porcentajes", EN: "Topic 3: Decimal & Percentage Conversions" },
+                content: {
+                    ES: "Para convertir un número decimal a porcentaje, multiplica por 100 recorriendo el punto decimal dos lugares hacia la derecha (ej. 0.35 = 35%). Para convertir porcentaje a decimal, divide entre 100 recorriendo el punto dos lugares a la izquierda (ej. 45% = 0.45).",
+                    EN: "To convert decimal to percent, multiply by 100 (move point 2 places right). To convert percent to decimal, divide by 100 (move point 2 places left)."
+                },
+                example: {
+                    ES: "Ejemplo: Expresar 0.17 en porcentaje: 0.17 × 100 = 17%. Igualmente, 0.60 equivale al 60%.",
+                    EN: "Example: Converting 0.17 to percentage: 0.17 × 100 = 17%. Likewise, 0.60 equals 60%."
+                }
+            },
+            {
+                id: 4,
+                title: { ES: "Tema 4: Problemas Combinados de Varios Pasos", EN: "Topic 4: Multi-step Word Problems" },
+                content: {
+                    ES: "Muchos problemas cotidianos requieren 2 o más operaciones consecutivas. Por ejemplo: 1) Calcular el subtotal multiplicando cantidad por precio unitario, 2) Aplicar un descuento en porcentaje multiplicando por el decimal correspondiente, y 3) Restar el descuento para obtener el precio final.",
+                    EN: "Real-world problems often take 2 or more steps: 1) Calculate subtotal, 2) Compute percentage discount, 3) Subtract discount to find total."
+                },
+                example: {
+                    ES: "Ejemplo: Compras 3 cuadernos de $45.50 MXN (Operación 1: 3 × 45.50 = $136.50 MXN) y recibes un descuento de $20.00 MXN (Operación 2: 136.50 - 20 = $116.50 MXN).",
+                    EN: "Example: Buying 3 notebooks at $45.50 MXN (Step 1: $136.50) with a $20 discount (Step 2: $116.50 MXN)."
+                }
+            },
+            {
+                id: 5,
+                title: { ES: "Tema 5: Fórmulas de Áreas de Figuras Planas", EN: "Topic 5: Plane Figure Area Formulas" },
+                content: {
+                    ES: "El área mide la superficie encerrada por una figura bidimensional. Fórmulas: Rectángulo = base × altura; Cuadrado = lado²; Triángulo = (base × altura) / 2; Círculo = π × radio² (utiliza π ≈ 3.1416).",
+                    EN: "Area measures enclosed 2D surface. Rectangle = base × height; Square = side²; Triangle = (base × height) / 2; Circle = π × r²."
+                },
+                example: {
+                    ES: "Ejemplo: Un triángulo con base 10.5 cm y altura 6 cm: ÁREA = (10.5 × 6) / 2 = 63 / 2 = 31.5 cm².",
+                    EN: "Example: Triangle with base 10.5 cm and height 6 cm: Area = (10.5 × 6) / 2 = 31.5 cm²."
+                }
+            }
+        ];
+
+        /* Formateador numérico con PUNTO DECIMAL para México */
+        function formatNumber(num) {
+            if (num === null || num === undefined) return '';
+            let n = parseFloat(num);
+            if (isNaN(n)) return num;
+            let parts = n.toString().split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return parts.join('.');
+        }
+
+        /* ==========================================================================
+           2. NAVEGACIÓN Y CONFIGURACIÓN GLOBAL
+           ========================================================================== */
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('aventura_theme', currentTheme);
+            document.getElementById('themeToggleBtn').innerText = currentTheme === 'light' ? '🌙' : '☀️';
+            renderLab();
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ES' ? 'EN' : 'ES';
+            localStorage.setItem('aventura_lang', currentLang);
+            document.getElementById('langToggleBtn').innerText = currentLang === 'ES' ? '🌐 ES' : '🌐 EN';
+            updateI18nText();
+            renderGoals();
+            renderTheory();
+            renderLab();
+            generateQuiz();
+        }
+
+        function updateI18nText() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) {
+                    el.innerText = i18n[currentLang][key];
+                }
+            });
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            
+            if (tabId === 'laboratorio') renderLab();
+        }
+
+        function renderGoals() {
+            const list = document.getElementById('goals-list');
+            list.innerHTML = goalsData[currentLang].map(g => `<li style="margin-bottom:0.4rem;">${g}</li>`).join('');
+        }
+
+        function renderTheory() {
+            const container = document.getElementById('accordion-container');
+            container.innerHTML = theoryData.map(item => `
+                <div class="accordion-item" id="accordion-${item.id}">
+                    <button class="accordion-header" onclick="toggleAccordion(${item.id})">
+                        <span>${item.title[currentLang]}</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-body">
+                        <div>${item.content[currentLang]}</div>
+                        <div class="example-box">
+                            <strong>💡 ${currentLang === 'ES' ? 'Ejemplo Real' : 'Real Example'}:</strong>
+                            <p>${item.example[currentLang]}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleAccordion(id) {
+            const item = document.getElementById(`accordion-${id}`);
+            item.classList.toggle('active');
+        }
+
+        /* ==========================================================================
+           3. LABORATORIO SVG DINÁMICO
+           ========================================================================== */
+        let labState = {
+            shape: 'rectangle',
+            width: 12.5,
+            height: 8.4,
+            radius: 6.2,
+            numPart: 3,
+            denPart: 4,
+            percent: 35
+        };
+
+        function setLabMode(mode) {
+            currentLabMode = mode;
+            renderLab();
+        }
+
+        function renderLab() {
+            const controls = document.getElementById('lab-controls');
+            const svg = document.getElementById('svg-lab-viewport');
+            const metrics = document.getElementById('lab-metrics');
+            svg.innerHTML = '';
+
+            if (currentLabMode === 'geometry') {
+                controls.innerHTML = `
+                    <div class="control-group">
+                        <label>${currentLang === 'ES' ? 'Figura Geométrica' : 'Geometric Shape'}:</label>
+                        <select class="btn" onchange="labState.shape = this.value; renderLab();">
+                            <option value="rectangle" ${labState.shape==='rectangle'?'selected':''}>${i18n[currentLang].shape_rectangle}</option>
+                            <option value="square" ${labState.shape==='square'?'selected':''}>${i18n[currentLang].shape_square}</option>
+                            <option value="triangle" ${labState.shape==='triangle'?'selected':''}>${i18n[currentLang].shape_triangle}</option>
+                            <option value="circle" ${labState.shape==='circle'?'selected':''}>${i18n[currentLang].shape_circle}</option>
+                        </select>
+                    </div>
+                    ${labState.shape !== 'circle' && labState.shape !== 'square' ? `
+                    <div class="control-group">
+                        <label>${currentLang === 'ES' ? 'Base / Ancho' : 'Base / Width'}: ${labState.width} cm</label>
+                        <input type="range" min="2" max="20" step="0.5" value="${labState.width}" oninput="labState.width = parseFloat(this.value); renderLab();">
+                    </div>` : ''}
+                    ${labState.shape === 'square' ? `
+                    <div class="control-group">
+                        <label>${currentLang === 'ES' ? 'Lado' : 'Side'}: ${labState.width} cm</label>
+                        <input type="range" min="2" max="20" step="0.5" value="${labState.width}" oninput="labState.width = parseFloat(this.value); labState.height = parseFloat(this.value); renderLab();">
+                    </div>` : ''}
+                    ${labState.shape === 'rectangle' || labState.shape === 'triangle' ? `
+                    <div class="control-group">
+                        <label>${currentLang === 'ES' ? 'Altura' : 'Height'}: ${labState.height} cm</label>
+                        <input type="range" min="2" max="20" step="0.5" value="${labState.height}" oninput="labState.height = parseFloat(this.value); renderLab();">
+                    </div>` : ''}
+                    ${labState.shape === 'circle' ? `
+                    <div class="control-group">
+                        <label>${currentLang === 'ES' ? 'Radio' : 'Radius'}: ${labState.radius} cm</label>
+                        <input type="range" min="1" max="10" step="0.5" value="${labState.radius}" oninput="labState.radius = parseFloat(this.value); renderLab();">
+                    </div>` : ''}
+                `;
+
+                const strokeColor = currentTheme === 'light' ? '#4b6cb7' : '#4895ef';
+                const fillColor = currentTheme === 'light' ? 'rgba(75, 108, 183, 0.25)' : 'rgba(72, 149, 239, 0.25)';
+
+                if (labState.shape === 'rectangle' || labState.shape === 'square') {
+                    const w = labState.width * 12;
+                    const h = (labState.shape === 'square' ? labState.width : labState.height) * 12;
+                    const x = (600 - w) / 2;
+                    const y = (350 - h) / 2;
+                    const area = (labState.width * (labState.shape === 'square' ? labState.width : labState.height)).toFixed(2);
+                    
+                    svg.innerHTML = `
+                        <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="3" rx="6" />
+                        <text x="300" y="${y - 12}" fill="var(--text-color)" text-anchor="middle" font-weight="600">Base = ${labState.width} cm</text>
+                        <text x="${x - 15}" y="175" fill="var(--text-color)" text-anchor="end" font-weight="600">${currentLang==='ES'?'Alt':'H'} = ${labState.shape==='square'?labState.width:labState.height} cm</text>
+                    `;
+                    metrics.innerHTML = `Área = ${formatNumber(area)} cm²`;
+                } else if (labState.shape === 'triangle') {
+                    const w = labState.width * 12;
+                    const h = labState.height * 12;
+                    const x1 = (600 - w) / 2, y1 = 175 + h / 2;
+                    const x2 = x1 + w, y2 = y1;
+                    const x3 = 300, y3 = y1 - h;
+                    const area = ((labState.width * labState.height) / 2).toFixed(2);
+
+                    svg.innerHTML = `
+                        <polygon points="${x1},${y1} ${x2},${y2} ${x3},${y3}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="3" />
+                        <line x1="300" y1="${y1}" x2="300" y2="${y3}" stroke="var(--danger)" stroke-width="2" stroke-dasharray="4" />
+                        <text x="300" y="${y1 + 22}" fill="var(--text-color)" text-anchor="middle" font-weight="600">Base = ${labState.width} cm</text>
+                        <text x="310" y="${y1 - h/2}" fill="var(--danger)" font-weight="600">h = ${labState.height} cm</text>
+                    `;
+                    metrics.innerHTML = `Área = (${labState.width} × ${labState.height}) / 2 = ${formatNumber(area)} cm²`;
+                } else if (labState.shape === 'circle') {
+                    const r = labState.radius * 14;
+                    const area = (Math.PI * Math.pow(labState.radius, 2)).toFixed(2);
+
+                    svg.innerHTML = `
+                        <circle cx="300" cy="175" r="${r}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="3" />
+                        <line x1="300" y1="175" x2="${300 + r}" y2="175" stroke="var(--danger)" stroke-width="3" />
+                        <text x="${300 + r/2}" y="165" fill="var(--danger)" font-weight="600" text-anchor="middle">r = ${labState.radius} cm</text>
+                    `;
+                    metrics.innerHTML = `Área = π × r² ≈ 3.1416 × (${labState.radius})² = ${formatNumber(area)} cm²`;
+                }
+            } else if (currentLabMode === 'fractions') {
+                controls.innerHTML = `
+                    <div class="control-group">
+                        <label>${currentLang === 'ES' ? 'Numerador' : 'Numerator'}: ${labState.numPart}</label>
+                        <input type="range" min="1" max="${labState.denPart}" value="${labState.numPart}" oninput="labState.numPart = parseInt(this.value); renderLab();">
+                    </div>
+                    <div class="control-group">
+                        <label>${currentLang === 'ES' ? 'Denominador' : 'Denominator'}: ${labState.denPart}</label>
+                        <input type="range" min="2" max="12" value="${labState.denPart}" oninput="labState.denPart = parseInt(this.value); if(labState.numPart>labState.denPart) labState.numPart=labState.denPart; renderLab();">
+                    </div>
+                `;
+
+                const r = 100;
+                const cx = 300, cy = 175;
+                let paths = '';
+                const angleStep = (2 * Math.PI) / labState.denPart;
+
+                for (let i = 0; i < labState.denPart; i++) {
+                    const startAngle = i * angleStep - Math.PI / 2;
+                    const endAngle = (i + 1) * angleStep - Math.PI / 2;
+                    const x1 = cx + r * Math.cos(startAngle);
+                    const y1 = cy + r * Math.sin(startAngle);
+                    const x2 = cx + r * Math.cos(endAngle);
+                    const y2 = cy + r * Math.sin(endAngle);
+                    const largeArc = angleStep > Math.PI ? 1 : 0;
+                    const fill = i < labState.numPart ? (currentTheme === 'light' ? '#00b4d8' : '#4cc9f0') : (currentTheme === 'light' ? '#e2e8f0' : '#334155');
+
+                    paths += `<path d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z" fill="${fill}" stroke="var(--card-bg)" stroke-width="2" />`;
+                }
+
+                svg.innerHTML = paths;
+                const valDec = (labState.numPart / labState.denPart).toFixed(3);
+                metrics.innerHTML = `${currentLang==='ES'?'Fracción':'Fraction'}: ${labState.numPart}/${labState.denPart} | ${currentLang==='ES'?'Decimal (con punto)':'Decimal'}: ${formatNumber(valDec)}`;
+            } else if (currentLabMode === 'percentage') {
+                controls.innerHTML = `
+                    <div class="control-group">
+                        <label>${currentLang==='ES'?'Porcentaje':'Percentage'}: ${labState.percent}%</label>
+                        <input type="range" min="0" max="100" value="${labState.percent}" oninput="labState.percent = parseInt(this.value); renderLab();">
+                    </div>
+                `;
+
+                const w = 300, h = 40;
+                const x = (600 - w) / 2, y = (350 - h) / 2;
+                const fillW = (w * labState.percent) / 100;
+
+                svg.innerHTML = `
+                    <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="var(--border-color)" rx="20" />
+                    <rect x="${x}" y="${y}" width="${fillW}" height="${h}" fill="var(--success)" rx="20" />
+                    <text x="300" y="${y + 25}" fill="white" font-weight="700" text-anchor="middle">${labState.percent}%</text>
+                `;
+                const dec = (labState.percent / 100).toFixed(2);
+                metrics.innerHTML = `${labState.percent}% = ${formatNumber(dec)} (${currentLang==='ES'?'de cada 100 partes':'per 100 parts'})`;
+            }
+        }
+
+        /* ==========================================================================
+           4. GENERADOR DE PROBLEMAS (1 Operación vs 2+ Operaciones)
+           ========================================================================== */
+        let quizData = [];
+        let canvasInstances = {};
+
+        function generateQuiz() {
+            quizData = [
+                generateSingleOpDecimal(),  // 1 Op Decimal
+                generateMultiOpDecimal(),   // 2+ Ops Decimal
+                generateSingleOpFraction(), // 1 Op Fracciones
+                generateMultiOpFraction(),  // 2+ Ops Fracciones
+                generateSingleOpPercent(),  // 1 Op Porcentaje
+                generateMultiOpGeometry()   // 2+ Ops Geometría
+            ];
+
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = quizData.map((q, idx) => `
+                <div class="card quiz-card" id="quiz-card-${idx}">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                        <span class="badge">${q.topicName[currentLang]}</span>
+                        <span class="op-tag ${q.isMultiOp ? 'op-multi' : 'op-single'}">
+                            ${q.isMultiOp ? (currentLang==='ES'?'2+ Operaciones':'2+ Steps') : (currentLang==='ES'?'1 Sola Operación':'1 Step')}
+                        </span>
+                    </div>
+                    <div class="quiz-question">${q.question[currentLang]}</div>
+                    <div class="quiz-options">
+                        ${q.options.map((opt, oIdx) => `
+                            <button class="option-btn" onclick="checkAnswer(${idx}, ${oIdx})">${opt}</button>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${idx}"></div>
+
+                    <!-- Sketchpad Component con Captura Completa -->
+                    <div class="sketchpad-container">
+                        <div class="sketchpad-toolbar">
+                            <button class="tool-btn active" onclick="setCanvasTool(${idx}, 'pencil')" title="${i18n[currentLang].sketch_pencil}">✏️ Pincel</button>
+                            <button class="tool-btn" onclick="setCanvasTool(${idx}, 'line')" title="${i18n[currentLang].sketch_line}">📏 Línea</button>
+                            <button class="tool-btn" onclick="setCanvasTool(${idx}, 'rect')" title="${i18n[currentLang].sketch_rect}">⬛ Rect</button>
+                            <button class="tool-btn" onclick="setCanvasTool(${idx}, 'eraser')" title="${i18n[currentLang].sketch_eraser}">🧹 Borrador</button>
+                            <input type="color" id="color-${idx}" value="#2c3e50" onchange="updateCanvasStyle(${idx})" style="width:28px; height:28px; border:none; cursor:pointer;">
+                            <input type="range" id="size-${idx}" min="1" max="15" value="3" onchange="updateCanvasStyle(${idx})" style="width:60px;">
+                            <button class="tool-btn" onclick="clearCanvas(${idx})" title="${i18n[currentLang].sketch_clear}">🗑️ Limpiar</button>
+                            <button class="tool-btn" onclick="copyCardScreenshot(${idx})" title="${i18n[currentLang].sketch_copy}" style="background-color:rgba(0,180,216,0.15); font-weight:600;">📋 Copiar Captura</button>
+                            <button class="tool-btn" onclick="downloadCardScreenshot(${idx})" title="${i18n[currentLang].sketch_download}" style="background-color:rgba(46,196,182,0.15); font-weight:600;">💾 Descargar Captura</button>
+                        </div>
+                        <canvas id="sketchpad-${idx}" class="sketchpad"></canvas>
+                    </div>
+                </div>
+            `).join('');
+
+            setTimeout(() => {
+                quizData.forEach((_, idx) => initCanvas(idx));
+            }, 100);
+        }
+
+        // 1. Problema de 1 sola operación (Decimales - Suma o Multiplicación)
+        function generateSingleOpDecimal() {
+            const pricePerMeter = (Math.random() * 15 + 20).toFixed(2); // ej 25.50
+            const meters = (Math.random() * 3 + 2).toFixed(1); // ej 3.5
+            const total = (parseFloat(pricePerMeter) * parseFloat(meters)).toFixed(2);
+            const ansCorrect = `$${formatNumber(total)} MXN`;
+            const options = shuffle([
+                ansCorrect,
+                `$${formatNumber((parseFloat(total) + 12.50).toFixed(2))} MXN`,
+                `$${formatNumber((parseFloat(total) - 8.20).toFixed(2))} MXN`,
+                `$${formatNumber((parseFloat(total) * 1.2).toFixed(2))} MXN`
+            ]);
+
+            return {
+                isMultiOp: false,
+                topicName: { ES: "Decimales (1 Operación)", EN: "Decimals (1 Step)" },
+                question: {
+                    ES: `Sofía compra ${meters} metros de listón escolar a $${formatNumber(pricePerMeter)} MXN por metro. ¿Cuánto paga en total por el listón?`,
+                    EN: `Sofía buys ${meters} meters of ribbon at $${formatNumber(pricePerMeter)} MXN per meter. How much does she pay in total?`
+                },
+                correctIndex: options.indexOf(ansCorrect),
+                options: options
+            };
+        }
+
+        // 2. Problema de 2 o más operaciones (Decimales - Multiplicación + Resta/Descuento)
+        function generateMultiOpDecimal() {
+            const count = Math.floor(Math.random() * 3 + 2); // 2 o 3 cuadernos
+            const unitPrice = (Math.random() * 20 + 35).toFixed(2); // ej 45.50
+            const subtotal = count * parseFloat(unitPrice);
+            const discount = 15.50;
+            const finalTotal = (subtotal - discount).toFixed(2);
+
+            const ansCorrect = `$${formatNumber(finalTotal)} MXN`;
+            const options = shuffle([
+                ansCorrect,
+                `$${formatNumber(subtotal.toFixed(2))} MXN`,
+                `$${formatNumber((parseFloat(finalTotal) + 20.00).toFixed(2))} MXN`,
+                `$${formatNumber((parseFloat(finalTotal) - 10.00).toFixed(2))} MXN`
+            ]);
+
+            return {
+                isMultiOp: true,
+                topicName: { ES: "Decimales (2+ Operaciones)", EN: "Decimals (2+ Steps)" },
+                question: {
+                    ES: `Mateo compra ${count} plumas a $${formatNumber(unitPrice)} MXN cada una. En la caja le aplican un descuento directo de $${formatNumber(discount)} MXN. ¿Cuánto paga en total? (Paso 1: Multiplicación, Paso 2: Resta).`,
+                    EN: `Mateo buys ${count} pens at $${formatNumber(unitPrice)} MXN each. At checkout, he gets a $${formatNumber(discount)} MXN discount. How much does he pay? (Step 1: Multiply, Step 2: Subtract).`
+                },
+                correctIndex: options.indexOf(ansCorrect),
+                options: options
+            };
+        }
+
+        // 3. Problema de 1 sola operación (Fracciones - División)
+        function generateSingleOpFraction() {
+            const totalFrac = "3/4";
+            const portionFrac = "1/8";
+            const ansCorrect = "6 porciones";
+            const options = shuffle(["6 porciones", "4 porciones", "8 porciones", "3 porciones"]);
+
+            return {
+                isMultiOp: false,
+                topicName: { ES: "Fracciones (1 Operación)", EN: "Fractions (1 Step)" },
+                question: {
+                    ES: `Se tienen 3/4 de un pastel de chocolate y se dividen en rebanadas individuales de 1/8 de pastel cada una. ¿Cuántas rebanadas se obtienen? (Operación: (3/4) ÷ (1/8)).`,
+                    EN: `You have 3/4 of a chocolate cake split into slices of 1/8 of a cake each. How many slices do you get? (Operation: (3/4) ÷ (1/8)).`
+                },
+                correctIndex: options.indexOf(ansCorrect),
+                options: options
+            };
+        }
+
+        // 4. Problema de 2 o más operaciones (Fracciones - Suma de heterogéneas + Conversión a Decimal)
+        function generateMultiOpFraction() {
+            // 1/2 + 1/4 = 3/4 = 0.75 kg
+            const ansCorrect = "0.75 kg";
+            const options = shuffle(["0.75 kg", "0.50 kg", "0.85 kg", "1.25 kg"]);
+
+            return {
+                isMultiOp: true,
+                topicName: { ES: "Fracciones (2+ Operaciones)", EN: "Fractions (2+ Steps)" },
+                question: {
+                    ES: `Valentina mezcla 1/2 kg de harina de trigo con 1/4 kg de harina de maíz. ¿Cuál es el peso total de la mezcla expresado en kilogramos decimales? (Paso 1: Sumar fracciones, Paso 2: Convertir a decimal).`,
+                    EN: `Valentina mixes 1/2 kg of wheat flour with 1/4 kg of corn flour. What is the total weight in decimal kilograms? (Step 1: Add fractions, Step 2: Convert to decimal).`
+                },
+                correctIndex: options.indexOf(ansCorrect),
+                options: options
+            };
+        }
+
+        // 5. Problema de 1 sola operación (Porcentajes - Conversión Directa)
+        function generateSingleOpPercent() {
+            const decVal = (Math.random() * 0.5 + 0.15).toFixed(2); // ej 0.42
+            const percVal = (parseFloat(decVal) * 100).toFixed(0);
+            const ansCorrect = `${percVal}%`;
+            const options = shuffle([
+                `${percVal}%`,
+                `${(parseFloat(percVal) / 10).toFixed(1)}%`,
+                `${parseFloat(percVal) + 12}%`,
+                `${parseFloat(percVal) - 5}%`
+            ]);
+
+            return {
+                isMultiOp: false,
+                topicName: { ES: "Porcentajes (1 Operación)", EN: "Percentages (1 Step)" },
+                question: {
+                    ES: `Convierte el número decimal ${formatNumber(decVal)} a su representación en porcentaje (Operación: multiplicar por 100).`,
+                    EN: `Convert the decimal number ${formatNumber(decVal)} into a percentage (Operation: multiply by 100).`
+                },
+                correctIndex: options.indexOf(ansCorrect),
+                options: options
+            };
+        }
+
+        // 6. Problema de 2 o más operaciones (Geometría - Área de Triángulo con Decimales)
+        function generateMultiOpGeometry() {
+            const base = (Math.random() * 4 + 6).toFixed(1); // ej 8.4 cm
+            const height = (Math.random() * 3 + 4).toFixed(1); // ej 5.2 cm
+            const mult = (parseFloat(base) * parseFloat(height)).toFixed(2);
+            const area = (mult / 2).toFixed(2);
+
+            const ansCorrect = `${formatNumber(area)} cm²`;
+            const options = shuffle([
+                ansCorrect,
+                `${formatNumber(mult)} cm²`,
+                `${formatNumber((parseFloat(area) + 4.5).toFixed(2))} cm²`,
+                `${formatNumber((parseFloat(area) - 2.1).toFixed(2))} cm²`
+            ]);
+
+            return {
+                isMultiOp: true,
+                topicName: { ES: "Geometría (2+ Operaciones)", EN: "Geometry (2+ Steps)" },
+                question: {
+                    ES: `Calcula el área de un triángulo con base = ${base} cm y altura = ${height} cm. (Paso 1: Multiplicar base × altura = ${mult}, Paso 2: Dividir entre 2).`,
+                    EN: `Calculate the area of a triangle with base = ${base} cm and height = ${height} cm. (Step 1: Multiply base × height, Step 2: Divide by 2).`
+                },
+                correctIndex: options.indexOf(ansCorrect),
+                options: options
+            };
+        }
+
+        function shuffle(arr) {
+            return arr.sort(() => Math.random() - 0.5);
+        }
+
+        function checkAnswer(qIdx, optionIdx) {
+            const feedbackEl = document.getElementById(`feedback-${qIdx}`);
+            const q = quizData[qIdx];
+
+            if (optionIdx === q.correctIndex) {
+                feedbackEl.className = "feedback success";
+                feedbackEl.innerText = i18n[currentLang].correct_msg;
+            } else {
+                feedbackEl.className = "feedback error";
+                feedbackEl.innerText = i18n[currentLang].incorrect_msg;
+            }
+        }
+
+        /* ==========================================================================
+           5. CANVAS CON POSICIONAMIENTO CORREGIDO Y CAPTURA COMPLETA
+           ========================================================================== */
+        function initCanvas(idx) {
+            const canvas = document.getElementById(`sketchpad-${idx}`);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            // Establecer resolución interna adaptada al tamaño visual real
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width || 600;
+            canvas.height = 240;
+
+            canvasInstances[idx] = {
+                canvas: canvas,
+                ctx: ctx,
+                tool: 'pencil',
+                color: document.getElementById(`color-${idx}`).value,
+                size: parseInt(document.getElementById(`size-${idx}`).value),
+                isDrawing: false,
+                startX: 0,
+                startY: 0,
+                strokes: [],
+                currentStroke: null
+            };
+
+            canvas.addEventListener('pointerdown', (e) => startDraw(e, idx));
+            canvas.addEventListener('pointermove', (e) => draw(e, idx));
+            canvas.addEventListener('pointerup', (e) => endDraw(e, idx));
+            canvas.addEventListener('pointerleave', (e) => endDraw(e, idx));
+        }
+
+        function setCanvasTool(idx, tool) {
+            canvasInstances[idx].tool = tool;
+            const toolbar = document.getElementById(`sketchpad-${idx}`).previousElementSibling;
+            toolbar.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function updateCanvasStyle(idx) {
+            canvasInstances[idx].color = document.getElementById(`color-${idx}`).value;
+            canvasInstances[idx].size = parseInt(document.getElementById(`size-${idx}`).value);
+        }
+
+        /* CORRECCIÓN DE COORDENADAS PARA QUE EL PUNTERO COINCIDA EXACTAMENTE */
+        function getPos(e, canvas) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDraw(e, idx) {
+            const inst = canvasInstances[idx];
+            inst.isDrawing = true;
+            const pos = getPos(e, inst.canvas);
+            inst.startX = pos.x;
+            inst.startY = pos.y;
+
+            if (inst.tool === 'pencil') {
+                inst.currentStroke = {
+                    type: 'pencil',
+                    color: inst.color,
+                    size: inst.size,
+                    points: [{ x: pos.x, y: pos.y }]
+                };
+            } else if (inst.tool === 'eraser') {
+                eraseStrokeAt(idx, pos.x, pos.y);
+            }
+        }
+
+        function draw(e, idx) {
+            const inst = canvasInstances[idx];
+            if (!inst.isDrawing) return;
+            const pos = getPos(e, inst.canvas);
+
+            if (inst.tool === 'pencil') {
+                inst.currentStroke.points.push({ x: pos.x, y: pos.y });
+                redrawCanvas(idx);
+            } else if (inst.tool === 'line' || inst.tool === 'rect') {
+                redrawCanvas(idx);
+                inst.ctx.beginPath();
+                inst.ctx.strokeStyle = inst.color;
+                inst.ctx.lineWidth = inst.size;
+                if (inst.tool === 'line') {
+                    inst.ctx.moveTo(inst.startX, inst.startY);
+                    inst.ctx.lineTo(pos.x, pos.y);
+                } else if (inst.tool === 'rect') {
+                    inst.ctx.rect(inst.startX, inst.startY, pos.x - inst.startX, pos.y - inst.startY);
+                }
+                inst.ctx.stroke();
+            } else if (inst.tool === 'eraser') {
+                eraseStrokeAt(idx, pos.x, pos.y);
+            }
+        }
+
+        function endDraw(e, idx) {
+            const inst = canvasInstances[idx];
+            if (!inst.isDrawing) return;
+            inst.isDrawing = false;
+            const pos = getPos(e, inst.canvas);
+
+            if (inst.tool === 'pencil' && inst.currentStroke) {
+                inst.strokes.push(inst.currentStroke);
+                inst.currentStroke = null;
+            } else if (inst.tool === 'line') {
+                inst.strokes.push({
+                    type: 'line', color: inst.color, size: inst.size,
+                    x1: inst.startX, y1: inst.startY, x2: pos.x, y2: pos.y
+                });
+            } else if (inst.tool === 'rect') {
+                inst.strokes.push({
+                    type: 'rect', color: inst.color, size: inst.size,
+                    x1: inst.startX, y1: inst.startY, x2: pos.x, y2: pos.y
+                });
+            }
+            redrawCanvas(idx);
+        }
+
+        function redrawCanvas(idx) {
+            const inst = canvasInstances[idx];
+            inst.ctx.clearRect(0, 0, inst.canvas.width, inst.canvas.height);
+
+            const renderStroke = (s) => {
+                inst.ctx.beginPath();
+                inst.ctx.strokeStyle = s.color;
+                inst.ctx.lineWidth = s.size;
+                inst.ctx.lineCap = 'round';
+                inst.ctx.lineJoin = 'round';
+
+                if (s.type === 'pencil') {
+                    if (s.points.length < 2) return;
+                    inst.ctx.moveTo(s.points[0].x, s.points[0].y);
+                    for (let i = 1; i < s.points.length; i++) {
+                        inst.ctx.lineTo(s.points[i].x, s.points[i].y);
+                    }
+                } else if (s.type === 'line') {
+                    inst.ctx.moveTo(s.x1, s.y1);
+                    inst.ctx.lineTo(s.x2, s.y2);
+                } else if (s.type === 'rect') {
+                    inst.ctx.rect(s.x1, s.y1, s.x2 - s.x1, s.y2 - s.y1);
+                }
+                inst.ctx.stroke();
+            };
+
+            inst.strokes.forEach(renderStroke);
+            if (inst.currentStroke) renderStroke(inst.currentStroke);
+        }
+
+        function eraseStrokeAt(idx, px, py) {
+            const inst = canvasInstances[idx];
+            const threshold = 14;
+
+            inst.strokes = inst.strokes.filter(s => {
+                if (s.type === 'pencil') {
+                    return !s.points.some(p => Math.hypot(p.x - px, p.y - py) < threshold);
+                } else if (s.type === 'line') {
+                    return distToSegment({ x: px, y: py }, { x: s.x1, y: s.y1 }, { x: s.x2, y: s.y2 }) > threshold;
+                } else if (s.type === 'rect') {
+                    const p1 = { x: s.x1, y: s.y1 }, p2 = { x: s.x2, y: s.y1 };
+                    const p3 = { x: s.x2, y: s.y2 }, p4 = { x: s.x1, y: s.y2 };
+                    const p = { x: px, y: py };
+                    return Math.min(
+                        distToSegment(p, p1, p2), distToSegment(p, p2, p3),
+                        distToSegment(p, p3, p4), distToSegment(p, p4, p1)
+                    ) > threshold;
+                }
+                return true;
+            });
+            redrawCanvas(idx);
+        }
+
+        function distToSegment(p, v, w) {
+            const l2 = Math.pow(v.x - w.x, 2) + Math.pow(v.y - w.y, 2);
+            if (l2 === 0) return Math.hypot(p.x - v.x, p.y - v.y);
+            let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+            t = Math.max(0, Math.min(1, t));
+            return Math.hypot(p.x - (v.x + t * (w.x - v.x)), p.y - (v.y + t * (w.y - v.y)));
+        }
+
+        function clearCanvas(idx) {
+            canvasInstances[idx].strokes = [];
+            redrawCanvas(idx);
+        }
+
+        /* CAPTURA COMPLETA: ENUNCIADO + OPCIONES + RETROALIMENTACIÓN + LIENZO */
+        function copyCardScreenshot(idx) {
+            const cardElement = document.getElementById(`quiz-card-${idx}`);
+            html2canvas(cardElement, { scale: 2 }).then(canvas => {
+                canvas.toBlob(blob => {
+                    if (navigator.clipboard && navigator.clipboard.write) {
+                        navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+                        alert(currentLang === 'ES' ? '¡Captura completa del ejercicio copiada al portapapeles!' : 'Full exercise shot copied to clipboard!');
+                    } else {
+                        alert(currentLang === 'ES' ? 'El navegador no soporta copiado directo. Descarga la imagen.' : 'Direct copy unsupported. Download the image instead.');
+                    }
+                });
+            });
+        }
+
+        function downloadCardScreenshot(idx) {
+            const cardElement = document.getElementById(`quiz-card-${idx}`);
+            html2canvas(cardElement, { scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Ejercicio_Completo_${idx + 1}_Grado6.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        /* ==========================================================================
+           6. INICIALIZACIÓN GENERAL
+           ========================================================================== */
+        window.addEventListener('DOMContentLoaded', () => {
+            if (currentTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('themeToggleBtn').innerText = '☀️';
+            }
+            document.getElementById('langToggleBtn').innerText = currentLang === 'ES' ? '🌐 ES' : '🌐 EN';
+
+            updateI18nText();
+            renderGoals();
+            renderTheory();
+            generateQuiz();
+        });
+    </script>
+</body>
+</html>
